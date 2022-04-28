@@ -183,7 +183,9 @@ public class StatusBarModel: ObservableObject {
     var lang: Language { Language(language: swift.parser) }
 
 
-    // Just for displaying the basic flow of using swift-tree-sitter
+    /* -----------------------------------------------------------
+     Just for displaying the basic flow of using swift-tree-sitter
+     -----------------------------------------------------------*/
     func setup() throws {
         // construct a NSAttributedString with default attributes
         attributedTest = .init(string: testString, attributes: [
@@ -280,15 +282,21 @@ public class StatusBarModel: ObservableObject {
         }
         return string
     }
+
+    /*----------------
+     End of debug code
+     ----------------*/
 }
 
 extension String {
+    // make string subscriptable with NSRange
     subscript(value: NSRange) -> Substring {
         let upperBound = String.Index(utf16Offset: Int(value.upperBound), in: self)
         let lowerBound = String.Index(utf16Offset: Int(value.lowerBound), in: self)
         return self[lowerBound..<upperBound]
     }
 
+    // get lines from a multiline string
     func lines() -> [String] {
         self.components(separatedBy: .newlines)
     }
