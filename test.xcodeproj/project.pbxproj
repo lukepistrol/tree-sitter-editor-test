@@ -16,7 +16,6 @@
 		28CD3F0628101A4D00493BF0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28CD3F0528101A4D00493BF0 /* Preview Assets.xcassets */; };
 		28E17C0828199B9D00B10B43 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E17C0728199B9D00B10B43 /* EditorView.swift */; };
 		28E17C0E2819B44000B10B43 /* SwiftTreeSitter in Frameworks */ = {isa = PBXBuildFile; productRef = 28E17C0D2819B44000B10B43 /* SwiftTreeSitter */; };
-		28E17C11281A0A6B00B10B43 /* tree_sitter in Frameworks */ = {isa = PBXBuildFile; productRef = 28E17C10281A0A6B00B10B43 /* tree_sitter */; };
 		28E17C14281A147300B10B43 /* Neon in Frameworks */ = {isa = PBXBuildFile; productRef = 28E17C13281A147300B10B43 /* Neon */; };
 /* End PBXBuildFile section */
 
@@ -39,7 +38,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				28E17C0E2819B44000B10B43 /* SwiftTreeSitter in Frameworks */,
-				28E17C11281A0A6B00B10B43 /* tree_sitter in Frameworks */,
 				28E17C14281A147300B10B43 /* Neon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -121,7 +119,6 @@
 			name = test;
 			packageProductDependencies = (
 				28E17C0D2819B44000B10B43 /* SwiftTreeSitter */,
-				28E17C10281A0A6B00B10B43 /* tree_sitter */,
 				28E17C13281A147300B10B43 /* Neon */,
 			);
 			productName = test;
@@ -154,7 +151,6 @@
 			mainGroup = 28CD3EF228101A4C00493BF0;
 			packageReferences = (
 				28E17C0C2819B44000B10B43 /* XCRemoteSwiftPackageReference "SwiftTreeSitter" */,
-				28E17C0F281A0A6B00B10B43 /* XCRemoteSwiftPackageReference "tree-sitter-xcframework" */,
 				28E17C12281A147300B10B43 /* XCRemoteSwiftPackageReference "Neon" */,
 			);
 			productRefGroup = 28CD3EFC28101A4C00493BF0 /* Products */;
@@ -394,14 +390,6 @@
 				minimumVersion = 0.5.0;
 			};
 		};
-		28E17C0F281A0A6B00B10B43 /* XCRemoteSwiftPackageReference "tree-sitter-xcframework" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/krzyzanowskim/tree-sitter-xcframework";
-			requirement = {
-				kind = exactVersion;
-				version = 0.206.10;
-			};
-		};
 		28E17C12281A147300B10B43 /* XCRemoteSwiftPackageReference "Neon" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ChimeHQ/Neon.git";
@@ -417,11 +405,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 28E17C0C2819B44000B10B43 /* XCRemoteSwiftPackageReference "SwiftTreeSitter" */;
 			productName = SwiftTreeSitter;
-		};
-		28E17C10281A0A6B00B10B43 /* tree_sitter */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 28E17C0F281A0A6B00B10B43 /* XCRemoteSwiftPackageReference "tree-sitter-xcframework" */;
-			productName = tree_sitter;
 		};
 		28E17C13281A147300B10B43 /* Neon */ = {
 			isa = XCSwiftPackageProductDependency;

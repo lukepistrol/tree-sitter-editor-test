@@ -58,6 +58,7 @@ struct EditorView: NSViewRepresentable {
         scrollView.hasHorizontalRuler = false
         scrollView.autoresizingMask = [.width, .height]
 
+        scrollView.contentView = NSClipView()
         scrollView.documentView = textView
 
         return scrollView
