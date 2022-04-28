@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		280E6249281AEAF300233788 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280E6248281AEAF300233788 /* String+Extensions.swift */; };
 		28A13E58281AAE4A00EC9423 /* CodeEditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A13E57281AAE4A00EC9423 /* CodeEditorTextView.swift */; };
 		28A13E5A281AB99F00EC9423 /* TextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A13E59281AB99F00EC9423 /* TextStorage.swift */; };
 		28CD3EFF28101A4C00493BF0 /* testApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CD3EFE28101A4C00493BF0 /* testApp.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		280E6248281AEAF300233788 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		28A13E57281AAE4A00EC9423 /* CodeEditorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorTextView.swift; sourceTree = "<group>"; };
 		28A13E59281AB99F00EC9423 /* TextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStorage.swift; sourceTree = "<group>"; };
 		28CD3EFB28101A4C00493BF0 /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,6 +47,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		280E624A281AEB2600233788 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				280E6248281AEAF300233788 /* String+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		280E624B281AEB3B00233788 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				28E17C0728199B9D00B10B43 /* EditorView.swift */,
+				28A13E59281AB99F00EC9423 /* TextStorage.swift */,
+				28A13E57281AAE4A00EC9423 /* CodeEditorTextView.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
 		28CD3EF228101A4C00493BF0 = {
 			isa = PBXGroup;
 			children = (
@@ -66,9 +86,8 @@
 			children = (
 				28CD3EFE28101A4C00493BF0 /* testApp.swift */,
 				28CD3F0028101A4C00493BF0 /* ContentView.swift */,
-				28E17C0728199B9D00B10B43 /* EditorView.swift */,
-				28A13E59281AB99F00EC9423 /* TextStorage.swift */,
-				28A13E57281AAE4A00EC9423 /* CodeEditorTextView.swift */,
+				280E624B281AEB3B00233788 /* Editor */,
+				280E624A281AEB2600233788 /* Extensions */,
 				28CD3F0228101A4D00493BF0 /* Assets.xcassets */,
 				28CD3F0728101A4D00493BF0 /* test.entitlements */,
 				28CD3F0428101A4D00493BF0 /* Preview Content */,
@@ -168,6 +187,7 @@
 				28A13E58281AAE4A00EC9423 /* CodeEditorTextView.swift in Sources */,
 				28CD3F0128101A4C00493BF0 /* ContentView.swift in Sources */,
 				28A13E5A281AB99F00EC9423 /* TextStorage.swift in Sources */,
+				280E6249281AEAF300233788 /* String+Extensions.swift in Sources */,
 				28CD3EFF28101A4C00493BF0 /* testApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
