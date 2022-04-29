@@ -84,7 +84,7 @@ class TextStorage: NSTextStorage {
 //                    print(capture.name, string[capture.node.range])
                     self.setAttributes(
                         [
-                            .foregroundColor: colorForCapture(capture.name?.appending("_call")),
+                            .foregroundColor: colorForCapture(capture.name?.appending("_alternate")),
                             .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium)
                         ],
                         range: capture.node.range
@@ -110,7 +110,7 @@ class TextStorage: NSTextStorage {
         case "string": return .systemRed
         case "type": return .systemPurple
         case "parameter": return .systemTeal
-        case "type_call": return .systemCyan
+        case "type_alternate": return .systemCyan
         case "": return .orange
         default: return .textColor
         }

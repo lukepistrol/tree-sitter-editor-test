@@ -122,6 +122,8 @@ public final class CodeEditorTextView: NSTextView {
         )
     }
 
+    // MARK: - Menus
+
     /// Override of the default context menu in the editor...
     ///
     /// This is a basic view without any functionality, once we have most the items built

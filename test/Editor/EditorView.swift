@@ -74,7 +74,7 @@ struct EditorView: NSViewRepresentable {
         }
 
         func textDidChange(_ notification: Notification) {
-            guard let textView = notification.object as? NSTextView else {
+            guard let textView = notification.object as? CodeEditorTextView else {
                 return
             }
             content.wrappedValue = textView.string
@@ -82,7 +82,7 @@ struct EditorView: NSViewRepresentable {
     }
 
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        guard let textView = scrollView.documentView as? NSTextView else {
+        guard let textView = scrollView.documentView as? CodeEditorTextView else {
             return
         }
     }
