@@ -60,7 +60,8 @@ class TextStorage: NSTextStorage {
         // e.g: When starting a string literal with one `"`
         // the whole document after would be highlighted as
         // a string and would not recover.
-        if tree.rootNode?.lastChild?.nodeType == "ERROR" { return }
+        if let expr = tree.rootNode?.sExpressionString,
+           expr.contains("ERROR") { return }
         let cursor = query.execute(node: rootNode, in: tree)
         cursor.setRange(range)
         var flag = true
