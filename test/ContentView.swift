@@ -224,25 +224,13 @@ public class StatusBarModel: ObservableObject {
 
         client.invalidationHandler = { minSet in
             let start = CFAbsoluteTimeGetCurrent()
-            client.executeResolvingQuery(query, in: range) { result in
-                do {
-                    let cursor = try result.get()
-                    for element in cursor {
-                        for capture in element.captures {
-                            print(capture.name ?? "", capture.node.range, "\t\t→ \"\(testString[capture.node.range])\"")
-                        }
-                    }
-                    let end = CFAbsoluteTimeGetCurrent()
-                    print("Fetched in: \(end-start) seconds")
-                } catch {
-                    print("Error: \(error)")
-                }
-            }
-//            client.executeHighlightsQuery(query, in: range) { result in
+//            client.executeResolvingQuery(query, in: range) { result in
 //                do {
-//                    let tokens = try result.get()
-//                    for token in tokens {
-//                        print(token.name, token.range, "\t\t→ \"\(testString[token.range])\"")
+//                    let cursor = try result.get()
+//                    for element in cursor {
+//                        for capture in element.captures {
+//                            print(capture.name ?? "", capture.node.range, "\t\t→ \"\(testString[capture.node.range])\"")
+//                        }
 //                    }
 //                    let end = CFAbsoluteTimeGetCurrent()
 //                    print("Fetched in: \(end-start) seconds")
@@ -250,6 +238,18 @@ public class StatusBarModel: ObservableObject {
 //                    print("Error: \(error)")
 //                }
 //            }
+            client.executeHighlightsQuery(query, in: range) { result in
+                do {
+                    let tokens = try result.get()
+                    for token in tokens {
+                        print(token.name, token.range, "\t\t→ \"\(testString[token.range])\"")
+                    }
+                    let end = CFAbsoluteTimeGetCurrent()
+                    print("Fetched in: \(end-start) seconds")
+                } catch {
+                    print("Error: \(error)")
+                }
+            }
         }
 
         client.willChangeContent(in: range)
