@@ -176,6 +176,7 @@ public class StatusBarModel: ObservableObject {
         .task {
             // For debugging or when just using a simple `Text()` as seen above
 //            try? setup()
+//            try? neon()
         }
     }
 
@@ -186,6 +187,77 @@ public class StatusBarModel: ObservableObject {
     /* -----------------------------------------------------------
      Just for displaying the basic flow of using swift-tree-sitter
      -----------------------------------------------------------*/
+    func neon() throws {
+        /*
+         See https://github.com/ChimeHQ/Neon#treesitterclient for documentation
+         */
+        attributedTest = .init(string: testString, attributes: [
+            .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium),
+            .foregroundColor: NSColor.textColor
+        ])
+
+        let url = swift.highlightQueryURL!
+        let query = try lang.query(contentsOf: url)
+
+        // create a range
+        let range = NSRange(location: 0, length: testString.count)
+
+        // map UTF16 code point to `Point(row:column:)`
+        let location: (Int) -> Point? = { (index: Int) -> Point? in
+            var row: UInt32 = 0
+            var col: UInt32 = 0
+            let str = NSString(string: testString)
+
+            for i in 0..<index {
+                if str.character(at: i) == 10 {
+                    row += 1
+                    col = 0
+                } else {
+                    col += 1
+                }
+            }
+            return Point(row: row, column: col)
+        }
+
+        // create a client
+        let client = try TreeSitterClient(language: lang, transformer: location)
+
+        client.invalidationHandler = { minSet in
+            let start = CFAbsoluteTimeGetCurrent()
+            client.executeResolvingQuery(query, in: range) { result in
+                do {
+                    let cursor = try result.get()
+                    for element in cursor {
+                        for capture in element.captures {
+                            print(capture.name ?? "", capture.node.range, "\t\t→ \"\(testString[capture.node.range])\"")
+                        }
+                    }
+                    let end = CFAbsoluteTimeGetCurrent()
+                    print("Fetched in: \(end-start) seconds")
+                } catch {
+                    print("Error: \(error)")
+                }
+            }
+//            client.executeHighlightsQuery(query, in: range) { result in
+//                do {
+//                    let tokens = try result.get()
+//                    for token in tokens {
+//                        print(token.name, token.range, "\t\t→ \"\(testString[token.range])\"")
+//                    }
+//                    let end = CFAbsoluteTimeGetCurrent()
+//                    print("Fetched in: \(end-start) seconds")
+//                } catch {
+//                    print("Error: \(error)")
+//                }
+//            }
+        }
+
+        client.willChangeContent(in: range)
+        client.didChangeContent(to: testString, in: range, delta: 0, limit: testString.count)
+
+    }
+
+
     func setup() throws {
         // construct a NSAttributedString with default attributes
         attributedTest = .init(string: testString, attributes: [

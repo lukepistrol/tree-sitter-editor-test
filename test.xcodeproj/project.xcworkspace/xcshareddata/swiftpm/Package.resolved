@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzyzanowskim/tree-sitter-xcframework",
       "state" : {
-        "revision" : "cc561c0d187e7e0886da8f0c5b1e0b242b0bb6ea",
-        "version" : "0.206.10"
+        "revision" : "8f4c5cd13662f46278e1dcb00b5a396af5552256",
+        "version" : "0.206.12"
       }
     }
   ],
