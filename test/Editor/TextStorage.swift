@@ -81,7 +81,7 @@ class TextStorage: NSTextStorage {
             }
             match.predicates.forEach { predicate in
                 predicate.captures(in: match).forEach { capture in
-                    print(capture.name, string[capture.node.range])
+//                    print(capture.name, string[capture.node.range])
                     self.setAttributes(
                         [
                             .foregroundColor: colorForCapture(capture.name?.appending("_call")),
