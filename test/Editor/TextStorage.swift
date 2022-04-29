@@ -66,19 +66,26 @@ class TextStorage: NSTextStorage {
         cursor.setRange(range)
         var flag = true
         while flag {
-            guard let match = cursor.nextCapture()
+            guard let match = cursor.nextMatch()
             else {
                 flag = false
                 break
             }
-
-            let capture = (name: match.name, range: match.node.range)
-//            print("\(capture.range.description) \t| \(capture.name ?? "") \t\t | \(string[capture.range])")
-            self.setAttributes([
-                .foregroundColor: colorForCapture(capture.name),
-                .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium)
-            ], range: capture.range)
+            match.captures.forEach { capture in
+                // DEBUG only:
+//                printCaptureInfo(capture)
+                self.setAttributes([
+                    .foregroundColor: colorForCapture(capture.name),
+                    .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium)
+                ], range: capture.node.range)
+            }
         }
+    }
+
+    private func printCaptureInfo(_ capture: QueryCapture) {
+        print(capture.node.range.description)
+        print("\t| type:", capture.name ?? "##########")
+        print("\t\t| content:", string[capture.node.range], "\n")
     }
 
     private func colorForCapture(_ capture: String?) -> NSColor {
