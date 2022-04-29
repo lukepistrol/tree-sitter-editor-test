@@ -83,7 +83,7 @@ class TextStorage: NSTextStorage {
 
     private func colorForCapture(_ capture: String?) -> NSColor {
         switch capture {
-        case "include", "constructor", "keyword", "boolean", "variable.builtin", "keyword.return", "keyword.function": return .magenta
+        case "include", "constructor", "keyword", "boolean", "variable.builtin", "keyword.return", "keyword.function", "repeat", "conditional": return .magenta
         case "comment": return .systemGreen
         case "variable", "property": return .systemTeal
         case "function", "method": return .systemMint
