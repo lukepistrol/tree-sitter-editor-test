@@ -43,7 +43,6 @@ struct EditorView: NSViewRepresentable {
         )
         if let textStorage = textView.textStorage as? TextStorage {
             textStorage.append(attrString)
-            print("OK")
         }
 
         textView.autoresizingMask = .width
