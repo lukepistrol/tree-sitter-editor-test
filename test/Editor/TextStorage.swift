@@ -56,6 +56,11 @@ class TextStorage: NSTextStorage {
         else {
             return
         }
+        // stops highlighting when an error occurs
+        // e.g: When starting a string literal with one `"`
+        // the whole document after would be highlighted as
+        // a string and would not recover.
+        if tree.rootNode?.lastChild?.nodeType == "ERROR" { return }
         let cursor = query.execute(node: rootNode, in: tree)
         cursor.setRange(range)
         var flag = true
@@ -80,8 +85,8 @@ class TextStorage: NSTextStorage {
         case "include", "constructor", "keyword", "boolean", "variable.builtin", "keyword.return", "keyword.function": return .magenta
         case "comment": return .systemGreen
         case "variable": return .systemTeal
-        case "function": return .systemMint
-        case "number": return .systemYellow
+        case "function", "function.macro": return .systemMint
+        case "number", "float": return .systemYellow
         case "string": return .systemRed
         case "type": return .systemPurple
         case "": return .orange
@@ -112,15 +117,16 @@ class TextStorage: NSTextStorage {
         if self.editedMask.contains(.editedCharacters) {
             let string = (self.string as NSString)
             let range = string.paragraphRange(for: editedRange)
-            highlight(range)
+            highlight(in: range)
+//            highlight(range)
         }
     }
 
-    func highlight(_ range: NSRange) {
-        let string = self.string as NSString
-        let line = self.stringStorage.attributedSubstring(from: range)
+//    func highlight(_ range: NSRange) {
+//        let string = self.string as NSString
+//        let line = self.stringStorage.attributedSubstring(from: range)
 
-        self.highlight(in: range)
+//        self.highlight(in: range)
 
 //        DispatchQueue.global().async {
 //            let tmpString = line
@@ -145,6 +151,6 @@ class TextStorage: NSTextStorage {
 //                self.edited(.editedAttributes, range: range, changeInLength: 0)
 //            }
 //        }
-    }
+//    }
 
 }
