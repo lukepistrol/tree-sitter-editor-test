@@ -85,11 +85,12 @@ class TextStorage: NSTextStorage {
         switch capture {
         case "include", "constructor", "keyword", "boolean", "variable.builtin", "keyword.return", "keyword.function": return .magenta
         case "comment": return .systemGreen
-        case "variable": return .systemTeal
-        case "function", "function.macro": return .systemMint
+        case "variable", "property": return .systemTeal
+        case "function", "method": return .systemMint
         case "number", "float": return .systemYellow
         case "string": return .systemRed
         case "type": return .systemPurple
+        case "parameter": return .systemTeal
         case "": return .orange
         default: return .textColor
         }
