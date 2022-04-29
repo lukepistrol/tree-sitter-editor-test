@@ -79,6 +79,18 @@ class TextStorage: NSTextStorage {
                     .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium)
                 ], range: capture.node.range)
             }
+            match.predicates.forEach { predicate in
+                predicate.captures(in: match).forEach { capture in
+                    print(capture.name, string[capture.node.range])
+                    self.setAttributes(
+                        [
+                            .foregroundColor: colorForCapture(capture.name?.appending("_call")),
+                            .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium)
+                        ],
+                        range: capture.node.range
+                    )
+                }
+            }
         }
     }
 
@@ -98,6 +110,7 @@ class TextStorage: NSTextStorage {
         case "string": return .systemRed
         case "type": return .systemPurple
         case "parameter": return .systemTeal
+        case "type_call": return .systemCyan
         case "": return .orange
         default: return .textColor
         }
