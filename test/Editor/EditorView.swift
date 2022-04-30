@@ -15,7 +15,9 @@ import tree_sitter_language_resources
  Still WIP but basically removed `Highlightr`.
  */
 
-struct EditorView: NSViewRepresentable {
+public struct EditorView: NSViewRepresentable {
+
+    public typealias NSViewType = NSScrollView
 
     private var content: Binding<String>
     private var textStorage: TextStorage
@@ -26,13 +28,13 @@ struct EditorView: NSViewRepresentable {
 
     private var language: LanguageResource
 
-    init(content: Binding<String>, language: LanguageResource) {
+    public init(content: Binding<String>, language: LanguageResource) {
         self.content = content
         self.language = language
         self.textStorage = TextStorage(language: language)
     }
 
-    func makeNSView(context: Context) -> NSScrollView {
+    public func makeNSView(context: Context) -> NSViewType {
         let scrollView = NSScrollView()
 
         let textView = CodeEditorTextView(textContainer: buildTextStorage(scrollView: scrollView))
@@ -64,14 +66,14 @@ struct EditorView: NSViewRepresentable {
         return scrollView
     }
 
-    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+    public func updateNSView(_ scrollView: NSViewType, context: Context) {
         guard let textView = scrollView.documentView as? CodeEditorTextView else {
             return
         }
         textView.font = self.font
     }
 
-    func buildTextStorage(scrollView: NSScrollView) -> NSTextContainer {
+    func buildTextStorage(scrollView: NSViewType) -> NSTextContainer {
         let layoutManager = NSLayoutManager()
         textStorage.addLayoutManager(layoutManager)
         let textContainer = NSTextContainer(containerSize: scrollView.frame.size)
@@ -83,17 +85,17 @@ struct EditorView: NSViewRepresentable {
 
     // MARK: Coordinator
 
-    func makeCoordinator() -> Coordinator {
+    public func makeCoordinator() -> Coordinator {
         Coordinator(content: content)
     }
 
-    final class Coordinator: NSObject, NSTextViewDelegate {
+    public final class Coordinator: NSObject, NSTextViewDelegate {
         private var content: Binding<String>
-        init(content: Binding<String>) {
+        public init(content: Binding<String>) {
             self.content = content
         }
 
-        func textDidChange(_ notification: Notification) {
+        public func textDidChange(_ notification: Notification) {
             guard let textView = notification.object as? CodeEditorTextView else {
                 return
             }
