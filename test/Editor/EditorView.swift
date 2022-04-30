@@ -22,7 +22,7 @@ public struct EditorView: NSViewRepresentable {
     private var content: Binding<String>
     private var textStorage: TextStorage
 
-    /* Temporary */
+    /* Temporary: This will dynamically be set from settings */
     @State
     private var font: NSFont = .monospacedSystemFont(ofSize: 11, weight: .medium)
 
