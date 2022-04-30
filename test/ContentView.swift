@@ -165,7 +165,7 @@ public class StatusBarModel: ObservableObject {
     var attributedTest: NSMutableAttributedString = .init("")
 
     var body: some View {
-        EditorView(content: $testString, language: lang)
+        EditorView(content: $testString, language: swift)
 //        ScrollView {
 //            Text(AttributedString(attributedTest))
 //                .textSelection(.enabled)

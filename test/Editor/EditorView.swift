@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftTreeSitter
+import tree_sitter_language_resources
 
 /*
  This is mostly copied from `CodeEdit`s current Editor
@@ -17,39 +18,39 @@ import SwiftTreeSitter
 struct EditorView: NSViewRepresentable {
 
     private var content: Binding<String>
-    private var language: Language
-
     private var textStorage: TextStorage
 
-    init(content: Binding<String>, language: Language) {
+    /* Temporary */
+    @State
+    private var font: NSFont = .monospacedSystemFont(ofSize: 11, weight: .medium)
+
+    private var language: LanguageResource
+
+    init(content: Binding<String>, language: LanguageResource) {
         self.content = content
         self.language = language
-        self.textStorage = TextStorage()
+        self.textStorage = TextStorage(language: language)
     }
 
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
 
-        let textView = CodeEditorTextView(textContainer: buildTextStorage(language: language, scrollView: scrollView))
+        let textView = CodeEditorTextView(textContainer: buildTextStorage(scrollView: scrollView))
 
         let attrString = NSAttributedString(
             string: content.wrappedValue,
             attributes:
                 [
                     .foregroundColor: NSColor.textColor,
-                    .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium),
-                    .backgroundColor: NSColor.textBackgroundColor
+                    .font: self.font
                 ]
         )
-        if let textStorage = textView.textStorage as? TextStorage {
-            textStorage.append(attrString)
-        }
+        self.textStorage.append(attrString)
 
         textView.autoresizingMask = .width
-        textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        textView.maxSize = NSSize(width: Double.greatestFiniteMagnitude, height: .greatestFiniteMagnitude)
         textView.minSize = NSSize(width: 0, height: scrollView.contentSize.height)
         textView.delegate = context.coordinator
-        textView.font = .monospacedSystemFont(ofSize: 11, weight: .medium)
 
         scrollView.drawsBackground = true
         scrollView.borderType = .noBorder
@@ -62,6 +63,25 @@ struct EditorView: NSViewRepresentable {
 
         return scrollView
     }
+
+    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+        guard let textView = scrollView.documentView as? CodeEditorTextView else {
+            return
+        }
+        textView.font = self.font
+    }
+
+    func buildTextStorage(scrollView: NSScrollView) -> NSTextContainer {
+        let layoutManager = NSLayoutManager()
+        textStorage.addLayoutManager(layoutManager)
+        let textContainer = NSTextContainer(containerSize: scrollView.frame.size)
+        textContainer.widthTracksTextView = true
+        textContainer.containerSize = NSSize(width: scrollView.contentSize.width, height: .greatestFiniteMagnitude)
+        layoutManager.addTextContainer(textContainer)
+        return textContainer
+    }
+
+    // MARK: Coordinator
 
     func makeCoordinator() -> Coordinator {
         Coordinator(content: content)
@@ -79,22 +99,6 @@ struct EditorView: NSViewRepresentable {
             }
             content.wrappedValue = textView.string
         }
-    }
-
-    func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        guard let textView = scrollView.documentView as? CodeEditorTextView else {
-            return
-        }
-    }
-
-    func buildTextStorage(language: Language, scrollView: NSScrollView) -> NSTextContainer {
-        let layoutManager = NSLayoutManager()
-        textStorage.addLayoutManager(layoutManager)
-        let textContainer = NSTextContainer(containerSize: scrollView.frame.size)
-        textContainer.widthTracksTextView = true
-        textContainer.containerSize = NSSize(width: scrollView.contentSize.width, height: .greatestFiniteMagnitude)
-        layoutManager.addTextContainer(textContainer)
-        return textContainer
     }
 
 }

@@ -20,31 +20,45 @@ import tree_sitter_language_resources
 class TextStorage: NSTextStorage {
     let stringStorage = NSTextStorage()
 
-    let swift = LanguageResource.swift
-    var lang: Language { Language(language: swift.parser) }
+    private var languageResource: LanguageResource?
+    private var language: Language? {
+        guard let languageResource = languageResource else {
+            return nil
+        }
+        return Language(language: languageResource.parser)
+    }
 
-    var parser: Parser?
-    var query: Query?
+    private var parser: Parser?
+    private var query: Query?
 
-    override init() {
+    private var _font: NSFont {
+        self.font ?? .monospacedSystemFont(ofSize: 11, weight: .medium)
+    }
+
+    init(language languageResource: LanguageResource) {
+        self.languageResource = languageResource
         super.init()
-
+        guard let language = language else {
+            return
+        }
         do {
             parser = Parser()
-            try parser!.setLanguage(lang)
+            try parser!.setLanguage(language)
 
-            let url = swift.highlightQueryURL
-            query = try lang.query(contentsOf: url!)
+            let url = languageResource.highlightQueryURL
+            query = try language.query(contentsOf: url!)
         } catch {
             print(error)
         }
     }
 
     required init?(coder: NSCoder) {
+        self.languageResource = nil
         super.init(coder: coder)
     }
 
     required init?(pasteboardPropertyList propertyList: Any, ofType type: NSPasteboard.PasteboardType) {
+        self.languageResource = nil
         super.init(pasteboardPropertyList: propertyList, ofType: type)
     }
 
@@ -71,33 +85,42 @@ class TextStorage: NSTextStorage {
                 flag = false
                 break
             }
-            match.captures.forEach { capture in
-                // DEBUG only:
-//                printCaptureInfo(capture)
-                self.setAttributes([
-                    .foregroundColor: colorForCapture(capture.name),
-                    .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium)
-                ], range: capture.node.range)
-            }
-            match.predicates.forEach { predicate in
-                predicate.captures(in: match).forEach { capture in
-//                    print(capture.name, string[capture.node.range])
-                    self.setAttributes(
-                        [
-                            .foregroundColor: colorForCapture(capture.name?.appending("_alternate")),
-                            .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium)
-                        ],
-                        range: capture.node.range
-                    )
-                }
-            }
+            highlightCaptures(match.captures)
+            highlightCaptures(for: match.predicates, in: match)
         }
     }
 
+    private func highlightCaptures(_ captures: [QueryCapture]) {
+        captures.forEach { capture in
+            // DEBUG only:
+//            printCaptureInfo(capture)
+            self.setAttributes([
+                .foregroundColor: colorForCapture(capture.name),
+                .font: _font
+            ], range: capture.node.range)
+        }
+    }
+
+    /// Only for debug use
     private func printCaptureInfo(_ capture: QueryCapture) {
         print(capture.node.range.description)
         print("\t| type:", capture.name ?? "##########")
         print("\t\t| content:", string[capture.node.range], "\n")
+    }
+
+    private func highlightCaptures(for predicates: [Predicate], in match: QueryMatch) {
+        predicates.forEach { predicate in
+            predicate.captures(in: match).forEach { capture in
+//                print(capture.name, string[capture.node.range])
+                self.setAttributes(
+                    [
+                        .foregroundColor: colorForCapture(capture.name?.appending("_alternate")),
+                        .font: _font
+                    ],
+                    range: capture.node.range
+                )
+            }
+        }
     }
 
     private func colorForCapture(_ capture: String?) -> NSColor {
@@ -140,39 +163,7 @@ class TextStorage: NSTextStorage {
             let string = (self.string as NSString)
             let range = string.paragraphRange(for: editedRange)
             highlight(in: range)
-//            highlight(range)
         }
     }
-
-//    func highlight(_ range: NSRange) {
-//        let string = self.string as NSString
-//        let line = self.stringStorage.attributedSubstring(from: range)
-
-//        self.highlight(in: range)
-
-//        DispatchQueue.global().async {
-//            let tmpString = line
-//            DispatchQueue.main.async {
-//                if (range.location + range.length) > self.stringStorage.length {
-//                    return
-//                }
-//
-//                if tmpString.string != self.stringStorage.attributedSubstring(from: range).string {
-//                    return
-//                }
-//
-//                self.beginEditing()
-//                tmpString.enumerateAttributes(in: NSMakeRange(0, tmpString.length), options: []) { attrs, locRange, stop in
-//                    var fixedRange = NSMakeRange(range.location + locRange.location, locRange.length)
-//                    fixedRange.length = (fixedRange.location + fixedRange.length < string.length) ? fixedRange.length : string.length-fixedRange.location
-//                    fixedRange.length = (fixedRange.length >= 0) ? fixedRange.length : 0
-//                    self.stringStorage.setAttributes(attrs, range: fixedRange)
-//
-//                }
-//                self.endEditing()
-//                self.edited(.editedAttributes, range: range, changeInLength: 0)
-//            }
-//        }
-//    }
 
 }
