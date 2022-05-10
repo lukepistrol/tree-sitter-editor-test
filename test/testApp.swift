@@ -12,7 +12,6 @@ struct testApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .preferredColorScheme(.dark)
         }
         .windowStyle(.automatic)
         .windowToolbarStyle(.unifiedCompact)

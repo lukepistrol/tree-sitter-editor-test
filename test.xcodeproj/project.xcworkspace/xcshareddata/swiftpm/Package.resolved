@@ -1,21 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "neon",
+      "identity" : "sttextview",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ChimeHQ/Neon.git",
+      "location" : "https://github.com/lukepistrol/STTextView.git",
       "state" : {
-        "revision" : "0ab3dd38eef23826c48389faa9820c79c04b7dcf",
-        "version" : "0.3.2"
-      }
-    },
-    {
-      "identity" : "rearrange",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ChimeHQ/Rearrange",
-      "state" : {
-        "revision" : "c3f6b51b23c0ce26fc6a489439047ecc7a86094b",
-        "version" : "1.5.1"
+        "branch" : "main",
+        "revision" : "d403a57719ff6ca71dcf2bb8b91fa94cc6617498"
       }
     },
     {
@@ -23,17 +14,35 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ChimeHQ/SwiftTreeSitter.git",
       "state" : {
-        "revision" : "fc0a8623f40ac9f0c5ed6bc7bbcb03b94ebb18d1",
-        "version" : "0.5.0"
+        "branch" : "main",
+        "revision" : "45e87e6ddd1bca570365db4296121828c20920e6"
       }
     },
     {
-      "identity" : "tree-sitter-xcframework",
+      "identity" : "tree-sitter",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/krzyzanowskim/tree-sitter-xcframework",
+      "location" : "https://github.com/mattmassicotte/tree-sitter",
       "state" : {
-        "revision" : "8f4c5cd13662f46278e1dcb00b5a396af5552256",
-        "version" : "0.206.12"
+        "branch" : "feature/swift-package",
+        "revision" : "7bafcd7d9e01edc19cef8bf300e4841e6d397bd2"
+      }
+    },
+    {
+      "identity" : "tree-sitter-json",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattmassicotte/tree-sitter-json.git",
+      "state" : {
+        "branch" : "feature/spm",
+        "revision" : "07fd294fe05a3d726ab9191e504db5f7648fa3fd"
+      }
+    },
+    {
+      "identity" : "tree-sitter-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattmassicotte/tree-sitter-swift.git",
+      "state" : {
+        "branch" : "feature/spm",
+        "revision" : "0305ffaa9df7266cf8f81d2a23f1b83888363288"
       }
     }
   ],

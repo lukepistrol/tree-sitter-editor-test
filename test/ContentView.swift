@@ -6,11 +6,8 @@
 //
 
 import SwiftUI
-import Neon
 import tree_sitter
-import tree_sitter_language_resources
 import SwiftTreeSitter
-import SwiftOverlayShims
 
 struct ContentView: View {
 
@@ -165,7 +162,7 @@ public class StatusBarModel: ObservableObject {
     var attributedTest: NSMutableAttributedString = .init("")
 
     var body: some View {
-        EditorView(content: $testString, language: swift)
+        EditorView(text: $testString)
 //        ScrollView {
 //            Text(AttributedString(attributedTest))
 //                .textSelection(.enabled)
@@ -180,57 +177,69 @@ public class StatusBarModel: ObservableObject {
         }
     }
 
-    let swift = LanguageResource.swift
-    var lang: Language { Language(language: swift.parser) }
-
-
-    /* -----------------------------------------------------------
-     Just for displaying the basic flow of using swift-tree-sitter
-     -----------------------------------------------------------*/
-    func neon() throws {
-        /*
-         See https://github.com/ChimeHQ/Neon#treesitterclient for documentation
-         */
-        attributedTest = .init(string: testString, attributes: [
-            .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium),
-            .foregroundColor: NSColor.textColor
-        ])
-
-        let url = swift.highlightQueryURL!
-        let query = try lang.query(contentsOf: url)
-
-        // create a range
-        let range = NSRange(location: 0, length: testString.count)
-
-        // map UTF16 code point to `Point(row:column:)`
-        let location: (Int) -> Point? = { (index: Int) -> Point? in
-            var row: UInt32 = 0
-            var col: UInt32 = 0
-            let str = NSString(string: testString)
-
-            for i in 0..<index {
-                if str.character(at: i) == 10 {
-                    row += 1
-                    col = 0
-                } else {
-                    col += 1
-                }
-            }
-            return Point(row: row, column: col)
-        }
-
-        // create a client
-        let client = try TreeSitterClient(language: lang, transformer: location)
-
-        client.invalidationHandler = { minSet in
-            let start = CFAbsoluteTimeGetCurrent()
-//            client.executeResolvingQuery(query, in: range) { result in
+//    let swift = LanguageResource.swift
+//    var lang: Language { Language(language: swift.parser) }
+//
+//
+//    /* -----------------------------------------------------------
+//     Just for displaying the basic flow of using swift-tree-sitter
+//     -----------------------------------------------------------*/
+//    func neon() throws {
+//        /*
+//         See https://github.com/ChimeHQ/Neon#treesitterclient for documentation
+//         */
+//        attributedTest = .init(string: testString, attributes: [
+//            .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium),
+//            .foregroundColor: NSColor.textColor
+//        ])
+//
+//        let url = swift.highlightQueryURL!
+//        let query = try lang.query(contentsOf: url)
+//
+//        // create a range
+//        let range = NSRange(location: 0, length: testString.count)
+//
+//        // map UTF16 code point to `Point(row:column:)`
+//        let location: (Int) -> Point? = { (index: Int) -> Point? in
+//            var row: UInt32 = 0
+//            var col: UInt32 = 0
+//            let str = NSString(string: testString)
+//
+//            for i in 0..<index {
+//                if str.character(at: i) == 10 {
+//                    row += 1
+//                    col = 0
+//                } else {
+//                    col += 1
+//                }
+//            }
+//            return Point(row: row, column: col)
+//        }
+//
+//        // create a client
+//        let client = try TreeSitterClient(language: lang, transformer: location)
+//
+//        client.invalidationHandler = { minSet in
+//            let start = CFAbsoluteTimeGetCurrent()
+////            client.executeResolvingQuery(query, in: range) { result in
+////                do {
+////                    let cursor = try result.get()
+////                    for element in cursor {
+////                        for capture in element.captures {
+////                            print(capture.name ?? "", capture.node.range, "\t\t→ \"\(testString[capture.node.range])\"")
+////                        }
+////                    }
+////                    let end = CFAbsoluteTimeGetCurrent()
+////                    print("Fetched in: \(end-start) seconds")
+////                } catch {
+////                    print("Error: \(error)")
+////                }
+////            }
+//            client.executeHighlightsQuery(query, in: range) { result in
 //                do {
-//                    let cursor = try result.get()
-//                    for element in cursor {
-//                        for capture in element.captures {
-//                            print(capture.name ?? "", capture.node.range, "\t\t→ \"\(testString[capture.node.range])\"")
-//                        }
+//                    let tokens = try result.get()
+//                    for token in tokens {
+//                        print(token.name, token.range, "\t\t→ \"\(testString[token.range])\"")
 //                    }
 //                    let end = CFAbsoluteTimeGetCurrent()
 //                    print("Fetched in: \(end-start) seconds")
@@ -238,122 +247,110 @@ public class StatusBarModel: ObservableObject {
 //                    print("Error: \(error)")
 //                }
 //            }
-            client.executeHighlightsQuery(query, in: range) { result in
-                do {
-                    let tokens = try result.get()
-                    for token in tokens {
-                        print(token.name, token.range, "\t\t→ \"\(testString[token.range])\"")
-                    }
-                    let end = CFAbsoluteTimeGetCurrent()
-                    print("Fetched in: \(end-start) seconds")
-                } catch {
-                    print("Error: \(error)")
-                }
-            }
-        }
-
-        client.willChangeContent(in: range)
-        client.didChangeContent(to: testString, in: range, delta: 0, limit: testString.count)
-
-    }
-
-
-    func setup() throws {
-        // construct a NSAttributedString with default attributes
-        attributedTest = .init(string: testString, attributes: [
-            .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium),
-            .foregroundColor: NSColor.textColor
-        ])
-
-        // create a parser and set the language
-        let parser = Parser()
-        try parser.setLanguage(lang)
-
-        // get the highlight query url from `LanguageResource`
-        let url = swift.highlightQueryURL
-        // create a query object of the data contained in the `*.scm` file
-        let query = try lang.query(contentsOf: url!)
-
-        let start = CFAbsoluteTimeGetCurrent()
-        guard let tree = parser.parse(testString),
-              let rootNode = tree.rootNode else { return}
-
-        // DEBUG only
-        printTree(node: rootNode, query: query)
-
-        let range = NSRange(location: 0, length: testString.count)
-
-        // create a query for the whole dowcument and pass in the tree object
-        let cursor = query.execute(node: rootNode, in: tree)
-
-        // set the range in the document to apply the query to
-        cursor.setRange(range)
-        var flag = true
-        while flag {
-            // get the next capture, if this is nil -> break
-            guard let match = cursor.nextCapture()
-            else { flag = false; break }
-
-            let capture = (name: match.name, range: match.node.range)
-            print("\(capture.range.description) \t| \(capture.name ?? "") \t\t | \(testString[capture.range])")
-
-            // set the according attributes for the range of the current node
-            attributedTest.setAttributes([
-                .foregroundColor: colorForCapture(capture.name),
-                .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium)
-            ], range: capture.range)
-        }
-        let end = CFAbsoluteTimeGetCurrent()
-
-        print("parsed tree in: \(end-start) seconds")
-
-        // print available strings
-        print("STRING:")
-        for i in 0..<query.stringCount {
-            print(query.stringName(for: i) ?? "")
-        }
-        // print available captures
-        print("CAPTURE:")
-        for i in 0..<query.captureCount {
-            print(query.captureName(for: i) ?? "")
-        }
-    }
-
-    // recoursively get and print the tree structure to the console
-    func printTree(node: Node, level: Int = 0, query: Query) {
-        print(tabs(level) + "- - - - - - - - - - - - - - - - - - - ")
-        print(tabs(level) + "| type:\t\t\(node.nodeType ?? "--")")
-        print(tabs(level) + "| range:\t\(node.range))")
-        print(tabs(level) + "| content:\t\(testString[node.range].replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: " ", with: ""))")
-        print(tabs(level) + "| \(node.description)")
-        node.enumerateChildren { child in
-            printTree(node: child, level: level + 1, query: query)
-        }
-    }
-
-    // replace with theme values
-    func colorForCapture(_ capture: String?) -> NSColor {
-        switch capture {
-        case "include", "constructor", "keyword", "boolean", "variable.builtin", "keyword.return", "keyword.function": return .magenta
-        case "comment": return .systemGreen
-        case "variable": return .systemTeal
-        case "function": return .systemMint
-        case "number": return .systemYellow
-        case "string": return .systemRed
-        case "type": return .systemPurple
-        case "": return .orange
-        default: return .textColor
-        }
-    }
-
-    // just for printing out the tree structure
-    func tabs(_ count: Int) -> String {
-        var string = ""
-        for _ in 0..<count {
-            string.append("\t")
-        }
-        return string
-    }
+//        }
+//
+//        client.willChangeContent(in: range)
+//        client.didChangeContent(to: testString, in: range, delta: 0, limit: testString.count)
+//
+//    }
+//
+//
+//    func setup() throws {
+//        // construct a NSAttributedString with default attributes
+//        attributedTest = .init(string: testString, attributes: [
+//            .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium),
+//            .foregroundColor: NSColor.textColor
+//        ])
+//
+//        // create a parser and set the language
+//        let parser = Parser()
+//        try parser.setLanguage(lang)
+//
+//        // get the highlight query url from `LanguageResource`
+//        let url = swift.highlightQueryURL
+//        // create a query object of the data contained in the `*.scm` file
+//        let query = try lang.query(contentsOf: url!)
+//
+//        let start = CFAbsoluteTimeGetCurrent()
+//        guard let tree = parser.parse(testString),
+//              let rootNode = tree.rootNode else { return}
+//
+//        // DEBUG only
+//        printTree(node: rootNode, query: query)
+//
+//        let range = NSRange(location: 0, length: testString.count)
+//
+//        // create a query for the whole dowcument and pass in the tree object
+//        let cursor = query.execute(node: rootNode, in: tree)
+//
+//        // set the range in the document to apply the query to
+//        cursor.setRange(range)
+//        var flag = true
+//        while flag {
+//            // get the next capture, if this is nil -> break
+//            guard let match = cursor.nextCapture()
+//            else { flag = false; break }
+//
+//            let capture = (name: match.name, range: match.node.range)
+//            print("\(capture.range.description) \t| \(capture.name ?? "") \t\t | \(testString[capture.range])")
+//
+//            // set the according attributes for the range of the current node
+//            attributedTest.setAttributes([
+//                .foregroundColor: colorForCapture(capture.name),
+//                .font: NSFont.monospacedSystemFont(ofSize: 11, weight: .medium)
+//            ], range: capture.range)
+//        }
+//        let end = CFAbsoluteTimeGetCurrent()
+//
+//        print("parsed tree in: \(end-start) seconds")
+//
+//        // print available strings
+//        print("STRING:")
+//        for i in 0..<query.stringCount {
+//            print(query.stringName(for: i) ?? "")
+//        }
+//        // print available captures
+//        print("CAPTURE:")
+//        for i in 0..<query.captureCount {
+//            print(query.captureName(for: i) ?? "")
+//        }
+//    }
+//
+//    // recoursively get and print the tree structure to the console
+//    func printTree(node: Node, level: Int = 0, query: Query) {
+//        print(tabs(level) + "- - - - - - - - - - - - - - - - - - - ")
+//        print(tabs(level) + "| type:\t\t\(node.nodeType ?? "--")")
+//        print(tabs(level) + "| range:\t\(node.range))")
+//        print(tabs(level) + "| content:\t\(testString[node.range].replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: " ", with: ""))")
+//        print(tabs(level) + "| \(node.description)")
+//        node.enumerateChildren { child in
+//            printTree(node: child, level: level + 1, query: query)
+//        }
+//    }
+//
+//    // replace with theme values
+//    func colorForCapture(_ capture: String?) -> NSColor {
+//        switch capture {
+//        case "include", "constructor", "keyword", "boolean", "variable.builtin", "keyword.return", "keyword.function": return .magenta
+//        case "comment": return .systemGreen
+//        case "variable": return .systemTeal
+//        case "function": return .systemMint
+//        case "number": return .systemYellow
+//        case "string": return .systemRed
+//        case "type": return .systemPurple
+//        case "": return .orange
+//        default: return .textColor
+//        }
+//    }
+//
+//    // just for printing out the tree structure
+//    func tabs(_ count: Int) -> String {
+//        var string = ""
+//        for _ in 0..<count {
+//            string.append("\t")
+//        }
+//        return string
+//    }
 
     /*----------------
      End of debug code

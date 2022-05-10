@@ -8,21 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		280E6249281AEAF300233788 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280E6248281AEAF300233788 /* String+Extensions.swift */; };
-		28A13E58281AAE4A00EC9423 /* CodeEditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A13E57281AAE4A00EC9423 /* CodeEditorTextView.swift */; };
-		28A13E5A281AB99F00EC9423 /* TextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A13E59281AB99F00EC9423 /* TextStorage.swift */; };
 		28CD3EFF28101A4C00493BF0 /* testApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CD3EFE28101A4C00493BF0 /* testApp.swift */; };
 		28CD3F0128101A4C00493BF0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CD3F0028101A4C00493BF0 /* ContentView.swift */; };
 		28CD3F0328101A4D00493BF0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28CD3F0228101A4D00493BF0 /* Assets.xcassets */; };
 		28CD3F0628101A4D00493BF0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28CD3F0528101A4D00493BF0 /* Preview Assets.xcassets */; };
+		28D64B36282AC1EF00B61B0C /* SwiftTreeSitter in Frameworks */ = {isa = PBXBuildFile; productRef = 28D64B35282AC1EF00B61B0C /* SwiftTreeSitter */; };
+		28D64B39282AC23D00B61B0C /* TreeSitterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 28D64B38282AC23D00B61B0C /* TreeSitterSwift */; };
+		28D64B3C282AC25100B61B0C /* STTextView in Frameworks */ = {isa = PBXBuildFile; productRef = 28D64B3B282AC25100B61B0C /* STTextView */; };
+		28D64B41282ACFD300B61B0C /* TreeSitterJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 28D64B40282ACFD300B61B0C /* TreeSitterJSON */; };
 		28E17C0828199B9D00B10B43 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E17C0728199B9D00B10B43 /* EditorView.swift */; };
-		28E17C0E2819B44000B10B43 /* SwiftTreeSitter in Frameworks */ = {isa = PBXBuildFile; productRef = 28E17C0D2819B44000B10B43 /* SwiftTreeSitter */; };
-		28E17C14281A147300B10B43 /* Neon in Frameworks */ = {isa = PBXBuildFile; productRef = 28E17C13281A147300B10B43 /* Neon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		280E6248281AEAF300233788 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
-		28A13E57281AAE4A00EC9423 /* CodeEditorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorTextView.swift; sourceTree = "<group>"; };
-		28A13E59281AB99F00EC9423 /* TextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStorage.swift; sourceTree = "<group>"; };
 		28CD3EFB28101A4C00493BF0 /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28CD3EFE28101A4C00493BF0 /* testApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testApp.swift; sourceTree = "<group>"; };
 		28CD3F0028101A4C00493BF0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -37,8 +35,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28E17C0E2819B44000B10B43 /* SwiftTreeSitter in Frameworks */,
-				28E17C14281A147300B10B43 /* Neon in Frameworks */,
+				28D64B36282AC1EF00B61B0C /* SwiftTreeSitter in Frameworks */,
+				28D64B39282AC23D00B61B0C /* TreeSitterSwift in Frameworks */,
+				28D64B3C282AC25100B61B0C /* STTextView in Frameworks */,
+				28D64B41282ACFD300B61B0C /* TreeSitterJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,8 +57,6 @@
 			isa = PBXGroup;
 			children = (
 				28E17C0728199B9D00B10B43 /* EditorView.swift */,
-				28A13E59281AB99F00EC9423 /* TextStorage.swift */,
-				28A13E57281AAE4A00EC9423 /* CodeEditorTextView.swift */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -115,11 +113,14 @@
 			buildRules = (
 			);
 			dependencies = (
+				28D64B3E282ACBF400B61B0C /* PBXTargetDependency */,
 			);
 			name = test;
 			packageProductDependencies = (
-				28E17C0D2819B44000B10B43 /* SwiftTreeSitter */,
-				28E17C13281A147300B10B43 /* Neon */,
+				28D64B35282AC1EF00B61B0C /* SwiftTreeSitter */,
+				28D64B38282AC23D00B61B0C /* TreeSitterSwift */,
+				28D64B3B282AC25100B61B0C /* STTextView */,
+				28D64B40282ACFD300B61B0C /* TreeSitterJSON */,
 			);
 			productName = test;
 			productReference = 28CD3EFB28101A4C00493BF0 /* test.app */;
@@ -150,8 +151,10 @@
 			);
 			mainGroup = 28CD3EF228101A4C00493BF0;
 			packageReferences = (
-				28E17C0C2819B44000B10B43 /* XCRemoteSwiftPackageReference "SwiftTreeSitter" */,
-				28E17C12281A147300B10B43 /* XCRemoteSwiftPackageReference "Neon" */,
+				28D64B34282AC1EF00B61B0C /* XCRemoteSwiftPackageReference "SwiftTreeSitter" */,
+				28D64B37282AC23D00B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-swift" */,
+				28D64B3A282AC25100B61B0C /* XCRemoteSwiftPackageReference "STTextView" */,
+				28D64B3F282ACFD300B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-json" */,
 			);
 			productRefGroup = 28CD3EFC28101A4C00493BF0 /* Products */;
 			projectDirPath = "";
@@ -180,15 +183,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				28E17C0828199B9D00B10B43 /* EditorView.swift in Sources */,
-				28A13E58281AAE4A00EC9423 /* CodeEditorTextView.swift in Sources */,
 				28CD3F0128101A4C00493BF0 /* ContentView.swift in Sources */,
-				28A13E5A281AB99F00EC9423 /* TextStorage.swift in Sources */,
 				280E6249281AEAF300233788 /* String+Extensions.swift in Sources */,
 				28CD3EFF28101A4C00493BF0 /* testApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		28D64B3E282ACBF400B61B0C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 28D64B3D282ACBF400B61B0C /* TreeSitterSwift */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		28CD3F0828101A4D00493BF0 /* Debug */ = {
@@ -382,34 +390,65 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		28E17C0C2819B44000B10B43 /* XCRemoteSwiftPackageReference "SwiftTreeSitter" */ = {
+		28D64B34282AC1EF00B61B0C /* XCRemoteSwiftPackageReference "SwiftTreeSitter" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ChimeHQ/SwiftTreeSitter.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.5.0;
+				branch = main;
+				kind = branch;
 			};
 		};
-		28E17C12281A147300B10B43 /* XCRemoteSwiftPackageReference "Neon" */ = {
+		28D64B37282AC23D00B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ChimeHQ/Neon.git";
+			repositoryURL = "https://github.com/mattmassicotte/tree-sitter-swift.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.3.2;
+				branch = feature/spm;
+				kind = branch;
+			};
+		};
+		28D64B3A282AC25100B61B0C /* XCRemoteSwiftPackageReference "STTextView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lukepistrol/STTextView.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		28D64B3F282ACFD300B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-json" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mattmassicotte/tree-sitter-json.git";
+			requirement = {
+				branch = feature/spm;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		28E17C0D2819B44000B10B43 /* SwiftTreeSitter */ = {
+		28D64B35282AC1EF00B61B0C /* SwiftTreeSitter */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 28E17C0C2819B44000B10B43 /* XCRemoteSwiftPackageReference "SwiftTreeSitter" */;
+			package = 28D64B34282AC1EF00B61B0C /* XCRemoteSwiftPackageReference "SwiftTreeSitter" */;
 			productName = SwiftTreeSitter;
 		};
-		28E17C13281A147300B10B43 /* Neon */ = {
+		28D64B38282AC23D00B61B0C /* TreeSitterSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 28E17C12281A147300B10B43 /* XCRemoteSwiftPackageReference "Neon" */;
-			productName = Neon;
+			package = 28D64B37282AC23D00B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-swift" */;
+			productName = TreeSitterSwift;
+		};
+		28D64B3B282AC25100B61B0C /* STTextView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28D64B3A282AC25100B61B0C /* XCRemoteSwiftPackageReference "STTextView" */;
+			productName = STTextView;
+		};
+		28D64B3D282ACBF400B61B0C /* TreeSitterSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28D64B37282AC23D00B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-swift" */;
+			productName = TreeSitterSwift;
+		};
+		28D64B40282ACFD300B61B0C /* TreeSitterJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28D64B3F282ACFD300B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-json" */;
+			productName = TreeSitterJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

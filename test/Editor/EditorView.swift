@@ -7,7 +7,8 @@
 
 import SwiftUI
 import SwiftTreeSitter
-import tree_sitter_language_resources
+import STTextView
+import TreeSitterSwift
 
 /*
  This is mostly copied from `CodeEdit`s current Editor
@@ -19,88 +20,98 @@ public struct EditorView: NSViewRepresentable {
 
     public typealias NSViewType = NSScrollView
 
-    private var content: Binding<String>
-    private var textStorage: TextStorage
+    private var text: Binding<String>
 
-    /* Temporary: This will dynamically be set from settings */
-    @State
-    private var font: NSFont = .monospacedSystemFont(ofSize: 11, weight: .medium)
-
-    private var language: LanguageResource
-
-    public init(content: Binding<String>, language: LanguageResource) {
-        self.content = content
-        self.language = language
-        self.textStorage = TextStorage(language: language)
+    public init(text: Binding<String>) {
+        self.text = text
     }
 
     public func makeNSView(context: Context) -> NSViewType {
-        let scrollView = NSScrollView()
+        let textView = STTextView()
 
-        let textView = CodeEditorTextView(textContainer: buildTextStorage(scrollView: scrollView))
+        let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        paragraph.lineHeightMultiple = 1.1
+        paragraph.defaultTabInterval = 28
 
-        let attrString = NSAttributedString(
-            string: content.wrappedValue,
-            attributes:
-                [
-                    .foregroundColor: NSColor.textColor,
-                    .font: self.font
-                ]
-        )
-        self.textStorage.append(attrString)
-
-        textView.autoresizingMask = .width
-        textView.maxSize = NSSize(width: Double.greatestFiniteMagnitude, height: .greatestFiniteMagnitude)
-        textView.minSize = NSSize(width: 0, height: scrollView.contentSize.height)
+        textView.defaultParagraphStyle = paragraph
+        textView.font = .monospacedSystemFont(ofSize: 14, weight: .medium)
+        textView.textColor = .textColor
+        textView.string = text.wrappedValue
+        textView.widthTracksTextView = true
+        textView.highlightSelectedLine = true
         textView.delegate = context.coordinator
 
-        scrollView.drawsBackground = true
-        scrollView.borderType = .noBorder
-        scrollView.hasVerticalScroller = true
-        scrollView.hasHorizontalRuler = false
-        scrollView.autoresizingMask = [.width, .height]
-
-        scrollView.contentView = NSClipView()
+        let scrollView = NSViewType()
         scrollView.documentView = textView
+
+        scrollView.verticalRulerView = STLineNumberRulerView(textView: textView, scrollView: scrollView)
+        scrollView.rulersVisible = true
 
         return scrollView
     }
 
     public func updateNSView(_ scrollView: NSViewType, context: Context) {
-        guard let textView = scrollView.documentView as? CodeEditorTextView else {
-            return
-        }
-        textView.font = self.font
+        guard let textView = scrollView.documentView as? STTextView else { return }
+        textView.string = text.wrappedValue
     }
-
-    func buildTextStorage(scrollView: NSViewType) -> NSTextContainer {
-        let layoutManager = NSLayoutManager()
-        textStorage.addLayoutManager(layoutManager)
-        let textContainer = NSTextContainer(containerSize: scrollView.frame.size)
-        textContainer.widthTracksTextView = true
-        textContainer.containerSize = NSSize(width: scrollView.contentSize.width, height: .greatestFiniteMagnitude)
-        layoutManager.addTextContainer(textContainer)
-        return textContainer
-    }
-
-    // MARK: Coordinator
 
     public func makeCoordinator() -> Coordinator {
-        Coordinator(content: content)
+        Coordinator(text: text)
     }
-
-    public final class Coordinator: NSObject, NSTextViewDelegate {
-        private var content: Binding<String>
-        public init(content: Binding<String>) {
-            self.content = content
-        }
-
-        public func textDidChange(_ notification: Notification) {
-            guard let textView = notification.object as? CodeEditorTextView else {
-                return
-            }
-            content.wrappedValue = textView.string
-        }
-    }
-
 }
+
+extension EditorView {
+    public final class Coordinator: NSObject, STTextViewDelegate {
+
+        var text: Binding<String>
+
+        public init(text: Binding<String>) {
+            self.text = text
+            super.init()
+            DispatchQueue.main.async {
+                self.setupTS()
+            }
+        }
+
+        private func setupTS() {
+            let swift = tree_sitter_swift()
+            let language = Language(language: swift!)
+
+            let parser = Parser()
+            try! parser.setLanguage(language)
+
+            guard let tree = parser.parse(text.wrappedValue) else { return }
+
+            DispatchQueue.global().async {
+                if let highlightURL = self.highlightURL(for: "swift") {
+                    let query = try! language.query(contentsOf: highlightURL)
+                    let cursor = query.execute(node: tree.rootNode!, in: tree)
+                    print(cursor.nextCapture()?.name)
+                }
+            }
+        }
+
+        private func highlightURL(for language: String) -> URL? {
+            if let urls = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: nil) {
+                for url in urls {
+                    if url.path.lowercased().contains(language) {
+                        if let resources = Bundle.urls(forResourcesWithExtension: nil, subdirectory: "queries", in: url) {
+                            for resource in resources {
+                                if resource.deletingPathExtension().lastPathComponent == "highlights" {
+                                    return resource
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return nil
+        }
+
+        public func textView(_ textView: STTextView, didChangeTextIn affectedCharRange: NSTextRange, replacementString: String) {
+            print("changed: \(affectedCharRange) - \(replacementString)")
+        }
+    }
+}
+
+
