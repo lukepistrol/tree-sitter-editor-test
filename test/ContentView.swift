@@ -11,6 +11,13 @@ import SwiftTreeSitter
 
 struct ContentView: View {
 
+    @State
+    var testString1: String = """
+{
+  "hello": "world"
+}
+"""
+
     // some static test data
     @State
     var testString: String = """
