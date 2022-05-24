@@ -19,12 +19,39 @@
       }
     },
     {
+      "identity" : "tree-sitter-go",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattmassicotte/tree-sitter-go.git",
+      "state" : {
+        "branch" : "feature/swift",
+        "revision" : "4890367f2a029e7be25bb7d0653a856fada1c1a8"
+      }
+    },
+    {
+      "identity" : "tree-sitter-html",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattmassicotte/tree-sitter-html.git",
+      "state" : {
+        "branch" : "feature/spm",
+        "revision" : "68b8bed0c1ebecbaf1919d0a7ae4b27592e6cc45"
+      }
+    },
+    {
       "identity" : "tree-sitter-json",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mattmassicotte/tree-sitter-json.git",
       "state" : {
         "branch" : "feature/spm",
         "revision" : "07fd294fe05a3d726ab9191e504db5f7648fa3fd"
+      }
+    },
+    {
+      "identity" : "tree-sitter-ruby",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattmassicotte/tree-sitter-ruby.git",
+      "state" : {
+        "branch" : "feature/swift",
+        "revision" : "e0923bfc25cadb2d5fd0a07c3b55e4b2d1501cb8"
       }
     },
     {

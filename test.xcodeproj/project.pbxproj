@@ -17,6 +17,9 @@
 		28D64B3C282AC25100B61B0C /* STTextView in Frameworks */ = {isa = PBXBuildFile; productRef = 28D64B3B282AC25100B61B0C /* STTextView */; };
 		28D64B41282ACFD300B61B0C /* TreeSitterJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 28D64B40282ACFD300B61B0C /* TreeSitterJSON */; };
 		28E17C0828199B9D00B10B43 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E17C0728199B9D00B10B43 /* EditorView.swift */; };
+		28E895ED283CD16E006BCCE5 /* TreeSitterHTML in Frameworks */ = {isa = PBXBuildFile; productRef = 28E895EC283CD16E006BCCE5 /* TreeSitterHTML */; };
+		28E895F0283CD2DB006BCCE5 /* TreeSitterGo in Frameworks */ = {isa = PBXBuildFile; productRef = 28E895EF283CD2DB006BCCE5 /* TreeSitterGo */; };
+		28E895F3283CD394006BCCE5 /* TreeSitterRuby in Frameworks */ = {isa = PBXBuildFile; productRef = 28E895F2283CD394006BCCE5 /* TreeSitterRuby */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +40,9 @@
 			files = (
 				28D64B36282AC1EF00B61B0C /* SwiftTreeSitter in Frameworks */,
 				28D64B39282AC23D00B61B0C /* TreeSitterSwift in Frameworks */,
+				28E895ED283CD16E006BCCE5 /* TreeSitterHTML in Frameworks */,
+				28E895F3283CD394006BCCE5 /* TreeSitterRuby in Frameworks */,
+				28E895F0283CD2DB006BCCE5 /* TreeSitterGo in Frameworks */,
 				28D64B3C282AC25100B61B0C /* STTextView in Frameworks */,
 				28D64B41282ACFD300B61B0C /* TreeSitterJSON in Frameworks */,
 			);
@@ -121,6 +127,9 @@
 				28D64B38282AC23D00B61B0C /* TreeSitterSwift */,
 				28D64B3B282AC25100B61B0C /* STTextView */,
 				28D64B40282ACFD300B61B0C /* TreeSitterJSON */,
+				28E895EC283CD16E006BCCE5 /* TreeSitterHTML */,
+				28E895EF283CD2DB006BCCE5 /* TreeSitterGo */,
+				28E895F2283CD394006BCCE5 /* TreeSitterRuby */,
 			);
 			productName = test;
 			productReference = 28CD3EFB28101A4C00493BF0 /* test.app */;
@@ -155,6 +164,9 @@
 				28D64B37282AC23D00B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-swift" */,
 				28D64B3A282AC25100B61B0C /* XCRemoteSwiftPackageReference "STTextView" */,
 				28D64B3F282ACFD300B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-json" */,
+				28E895EB283CD16E006BCCE5 /* XCRemoteSwiftPackageReference "tree-sitter-html" */,
+				28E895EE283CD2DB006BCCE5 /* XCRemoteSwiftPackageReference "tree-sitter-go" */,
+				28E895F1283CD394006BCCE5 /* XCRemoteSwiftPackageReference "tree-sitter-ruby" */,
 			);
 			productRefGroup = 28CD3EFC28101A4C00493BF0 /* Products */;
 			projectDirPath = "";
@@ -424,6 +436,30 @@
 				kind = branch;
 			};
 		};
+		28E895EB283CD16E006BCCE5 /* XCRemoteSwiftPackageReference "tree-sitter-html" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mattmassicotte/tree-sitter-html.git";
+			requirement = {
+				branch = feature/spm;
+				kind = branch;
+			};
+		};
+		28E895EE283CD2DB006BCCE5 /* XCRemoteSwiftPackageReference "tree-sitter-go" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mattmassicotte/tree-sitter-go.git";
+			requirement = {
+				branch = feature/swift;
+				kind = branch;
+			};
+		};
+		28E895F1283CD394006BCCE5 /* XCRemoteSwiftPackageReference "tree-sitter-ruby" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mattmassicotte/tree-sitter-ruby.git";
+			requirement = {
+				branch = feature/swift;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -451,6 +487,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 28D64B3F282ACFD300B61B0C /* XCRemoteSwiftPackageReference "tree-sitter-json" */;
 			productName = TreeSitterJSON;
+		};
+		28E895EC283CD16E006BCCE5 /* TreeSitterHTML */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28E895EB283CD16E006BCCE5 /* XCRemoteSwiftPackageReference "tree-sitter-html" */;
+			productName = TreeSitterHTML;
+		};
+		28E895EF283CD2DB006BCCE5 /* TreeSitterGo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28E895EE283CD2DB006BCCE5 /* XCRemoteSwiftPackageReference "tree-sitter-go" */;
+			productName = TreeSitterGo;
+		};
+		28E895F2283CD394006BCCE5 /* TreeSitterRuby */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28E895F1283CD394006BCCE5 /* XCRemoteSwiftPackageReference "tree-sitter-ruby" */;
+			productName = TreeSitterRuby;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

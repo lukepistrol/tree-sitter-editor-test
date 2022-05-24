@@ -10,6 +10,9 @@ import SwiftTreeSitter
 import STTextView
 import TreeSitterSwift
 import TreeSitterJSON
+import TreeSitterHTML
+import TreeSitterGo
+import TreeSitterRuby
 
 /*
  This is mostly copied from `CodeEdit`s current Editor
@@ -89,6 +92,10 @@ extension EditorView {
             //if let highlightURL = self.highlightURL(for: "swift"),
             if let highlightURL = Bundle.main.resourceURL?
                 .appendingPathComponent("TreeSitterSwift_TreeSitterSwift.bundle")
+//                .appendingPathComponent("TreeSitterHTML_TreeSitterHTML.bundle")
+//                .appendingPathComponent("TreeSitterGo_TreeSitterGo.bundle")
+//                .appendingPathComponent("TreeSitterRuby_TreeSitterRuby.bundle")
+//                .appendingPathComponent("TreeSitterJSON_TreeSitterJSON.bundle")
                 .appendingPathComponent("Contents/Resources/queries/highlights.scm"),
                let textView = textView {
                 Task(priority: .userInitiated) {
@@ -96,7 +103,7 @@ extension EditorView {
                     /*
                      Takes way too long for Swift (7.06s)
                      */
-                    self.query = try? language.query(contentsOf: highlightURL)
+                    self.query = try! language.query(contentsOf: highlightURL)
                     let end = CFAbsoluteTimeGetCurrent()
                     print("Fetching Time: \(end-start) s")
 
