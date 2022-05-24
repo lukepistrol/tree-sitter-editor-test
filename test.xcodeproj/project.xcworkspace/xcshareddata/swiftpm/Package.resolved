@@ -15,16 +15,7 @@
       "location" : "https://github.com/ChimeHQ/SwiftTreeSitter.git",
       "state" : {
         "branch" : "main",
-        "revision" : "922c30a71d3fb8030d9f29f12ab4b00cb618104b"
-      }
-    },
-    {
-      "identity" : "tree-sitter",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mattmassicotte/tree-sitter",
-      "state" : {
-        "branch" : "feature/swift-package",
-        "revision" : "7bafcd7d9e01edc19cef8bf300e4841e6d397bd2"
+        "revision" : "e3dbcde1d0efd65c57835e982e2579e6bc3fc75e"
       }
     },
     {

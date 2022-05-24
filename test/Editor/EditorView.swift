@@ -55,8 +55,8 @@ public struct EditorView: NSViewRepresentable {
     }
 
     public func updateNSView(_ scrollView: NSViewType, context: Context) {
-        print("Update")
-        guard let textView = scrollView.documentView as? STTextView else { return }
+//        print("Update")
+//        guard let textView = scrollView.documentView as? STTextView else { return }
 //        textView.string = text
 //        context.coordinator.highlight(in: NSRange(location: 0, length: self.text.count))
     }
@@ -86,9 +86,12 @@ extension EditorView {
             let swift = tree_sitter_swift()
             let language = Language(language: swift!)
 
-            if let highlightURL = self.highlightURL(for: "swift"),
+            //if let highlightURL = self.highlightURL(for: "swift"),
+            if let highlightURL = Bundle.main.resourceURL?
+                .appendingPathComponent("TreeSitterSwift_TreeSitterSwift.bundle")
+                .appendingPathComponent("Contents/Resources/queries/highlights.scm"),
                let textView = textView {
-                DispatchQueue.global(qos: .unspecified).async {
+                Task(priority: .userInitiated) {
                     let start = CFAbsoluteTimeGetCurrent()
                     /*
                      Takes way too long for Swift (7.06s)
@@ -99,7 +102,6 @@ extension EditorView {
 
                     self.parser = Parser()
                     try? self.parser!.setLanguage(language)
-
                     DispatchQueue.main.async {
                         self.highlight(in: self.range(from: textView.textContentStorage.documentRange, in: textView))
                     }
@@ -108,24 +110,25 @@ extension EditorView {
             
         }
 
-        private func highlightURL(for language: String) -> URL? {
-            if let urls = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: nil) {
-                for url in urls {
-                    if url.path.lowercased().contains(language) {
-                        if let resources = Bundle.urls(forResourcesWithExtension: nil, subdirectory: "queries", in: url) {
-                            for resource in resources {
-                                if resource.deletingPathExtension().lastPathComponent == "highlights" {
-                                    return resource
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return nil
-        }
+//        private func highlightURL(for language: String) -> URL? {
+//            if let urls = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: nil) {
+//                for url in urls {
+//                    if url.path.lowercased().contains(language) {
+//                        if let resources = Bundle.urls(forResourcesWithExtension: nil, subdirectory: "queries", in: url) {
+//                            for resource in resources {
+//                                if resource.deletingPathExtension().lastPathComponent == "highlights" {
+//                                    return resource
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            return nil
+//        }
 
         public func highlight(in range: NSRange) {
+            assert(Thread.isMainThread)
             guard let query = query,
                   let parser = parser,
                   let tree = parser.parse(self.text),
@@ -143,7 +146,7 @@ extension EditorView {
             cursor.setRange(range)
             var flag = true
             while flag {
-                guard let match = cursor.nextMatch()
+                guard let match = cursor.next()
                 else {
                     flag = false
                     break
